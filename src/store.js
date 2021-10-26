@@ -1,5 +1,18 @@
 import {createStore, combineReducers, applyMiddleware} from "redux";
 import thunk from 'redux-thunk'; //异步
+/*
+引入持久化依赖库
+*/
+import {persistStore, persistReducer} from 'redux-persist';
+import storageSession from 'redux-persist/lib/storage/session'
+/*
+配置持久化
+*/
+const storageConfig = {
+    key: 'root',
+    storage: storageSession,
+    blacklist: ['name', 'age', 'GetNum']
+}
 
 //默认state
 const defaultState = {
@@ -77,7 +90,15 @@ const PageTitle = (state = defaultState.PageTitle, action) => {
     }
 }
 
-export const store = createStore(combineReducers({GetNum, PageTitle}), applyMiddleware(thunk))
+/*
+持久化store
+*/
+const myPersistReducer = persistReducer(storageConfig, combineReducers({GetNum, PageTitle}))
+export const store = createStore(myPersistReducer, applyMiddleware(thunk))
+export const persistor = persistStore(store)
+
+// 非持久化store
+//export const store = createStore(combineReducers({GetNum, PageTitle}), applyMiddleware(thunk))
 
 //store.state映射
 export const mapStateToProps = (state) => {
