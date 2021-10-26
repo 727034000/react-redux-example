@@ -11,7 +11,7 @@ import storageSession from 'redux-persist/lib/storage/session'
 const storageConfig = {
     key: 'root',
     storage: storageSession,
-    blacklist: ['name', 'age', 'GetNum']
+    blacklist: ['name', 'age']
 }
 
 //默认state
